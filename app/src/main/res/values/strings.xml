@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Notas de Viaje</string>
+    <string name="crear_nota">Crear Nota</string>
+    <string name="titulo">Titulo</string>
+    <string name="descripcion">Descripcion</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="guardar">Guardar</string>
+    <string name="escribir_nota">Escribir Nota</string>
+    <string name="editar_nota">Editar Nota</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="buscar">Buscar</string>
+    <string name="eliminar_nota">Eliminar nota</string>
+</resources>
