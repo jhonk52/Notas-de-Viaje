@@ -168,12 +168,12 @@ public class Principal extends AppCompatActivity {
         Cursor datos = bd.listarNotas(queBuscar);
 
         //si encuentra datos
-        if(datos.moveToFirst()) {
-            //adaptador
+        //if(datos.moveToFirst()) {
+
             SimpleCursorAdapter adaptador = new SimpleCursorAdapter(Principal.this,R.layout.plantilla_listadenotas,datos,campos,ids,0);
             listaDeNotas.setAdapter(adaptador);
 
-        }
+        //}
 
 
     }
