@@ -1,4 +1,4 @@
-package notasdeviaje.notasdeviaje.modelos;
+package paquetenotasdeviaje.notasdeviaje.modelos;
 
 public class Nota {
 

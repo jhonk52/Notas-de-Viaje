@@ -1,11 +1,13 @@
 package paquetenotasdeviaje.notasdeviaje.activitys;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -19,7 +21,8 @@ import android.widget.ListView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import paquetenotasdeviaje.notasdeviaje.R;
-import notasdeviaje.notasdeviaje.modelos.Nota;
+import paquetenotasdeviaje.notasdeviaje.adaptadores.AdaptadorListaDeNotas;
+import paquetenotasdeviaje.notasdeviaje.modelos.Nota;
 import paquetenotasdeviaje.notasdeviaje.basededatos.BasedeDatos;
 import paquetenotasdeviaje.notasdeviaje.basededatos.CamposBasedeDatos;
 
@@ -35,35 +38,30 @@ public class Principal extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setIcon(R.mipmap.ic_app2);
-
+        getSupportActionBar().setIcon(R.mipmap.ic_app);
 
         btn_agregarNota = findViewById(R.id.btn_agregarnota_principal);
         listaDeNotas = findViewById(R.id.listaDeNotas);
-        listarDatos("");
+
+        // se listan en pantalla todas las notas existentes
+        listarNotas("");
 
         listaDeNotas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Cursor cursor = (Cursor) listaDeNotas.getItemAtPosition(position);
-                Intent intent = new Intent(Principal.this, EscribirNota.class);
-
-                intent.putExtra("Titulo",cursor.getString(1));
-
-                startActivity(intent);
-                finish();
-
+                Nota nota = (Nota) listaDeNotas.getItemAtPosition(position);
+                pasarAActivity_EscribirNota("Titulo",nota.getTitulo(),true);
             }
         });
+
+        //se establece que el listview listaDeNotas va a tener un ContextMenu
         registerForContextMenu(listaDeNotas);
 
         btn_agregarNota.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Principal.this, EscribirNota.class);
-                startActivity(intent);
-                finish();
+                pasarAActivity_EscribirNota("","",true);
             }
         });
 
@@ -77,9 +75,9 @@ public class Principal extends AppCompatActivity {
 
         getMenuInflater().inflate(R.menu.optionsmenu_principal,menu);
 
-
         MenuItem searchItem = menu.findItem(R.id.searchView);
         SearchView searchView = (SearchView) searchItem.getActionView();
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -87,35 +85,22 @@ public class Principal extends AppCompatActivity {
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                listarDatos(newText.trim());
-
-                //Toast.makeText(Principal.this, newText, Toast.LENGTH_LONG).show();
+            public boolean onQueryTextChange(String searchText) {
+                listarNotas(searchText.trim());
                 return false;
             }
         });
 
-
         return super.onCreateOptionsMenu(menu);
     }
 
-
-
+/*
+    //Menu de opciones aun no se está utilizando, solo el searchView
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        switch (item.getItemId()){
-
-
-
-        }
-
-
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
+        switch (item.getItemId()){}
+        return super.onOptionsItemSelected(item);}
+*/
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -128,23 +113,33 @@ public class Principal extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
 
-        AdapterView.AdapterContextMenuInfo informacionItemSeleccionado = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        final AdapterView.AdapterContextMenuInfo informacionItemSeleccionado = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
         switch (item.getItemId()){
 
             case R.id.item_eliminar_principal:
 
-                BasedeDatos basedeDatos = new BasedeDatos(Principal.this);
-                Cursor cursor = (Cursor) listaDeNotas.getItemAtPosition(informacionItemSeleccionado.position);
+                new AlertDialog.Builder(Principal.this)
+                        .setTitle("Eliminar Nota")
+                        .setMessage("Esta seguro que desea eliminar esta nota?")
+                        .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
 
-                String tituloNotaAEliminar = cursor.getString(cursor.getColumnIndex(CamposBasedeDatos.CAMPO_TITULO));
-                basedeDatos.eliminarNota(new Nota(tituloNotaAEliminar,""));
+                                BasedeDatos basedeDatos = new BasedeDatos(Principal.this);
+                                Nota nota = (Nota) listaDeNotas.getItemAtPosition(informacionItemSeleccionado.position);
 
-                listarDatos("");
+                                String tituloNotaAEliminar = nota.getTitulo();
+                                basedeDatos.eliminarNota(new Nota(tituloNotaAEliminar,""));
+
+                                listarNotas("");
+
+                            }
+                        }).setNegativeButton("Cancelar",null)
+                        .show();
+
                 break;
-
         }
-
 
         return super.onContextItemSelected(item);
     }
@@ -152,31 +147,31 @@ public class Principal extends AppCompatActivity {
 
 
 
-    private void listarDatos(String queBuscar) {
+    private void listarNotas(String buscar) {
 
-        int ids[] = {
-                R.id.txt_titulo_plantillalistadenotas,
-                R.id.txt_descripcion_plantillalistadenotas
-        };
+        BasedeDatos bd = new BasedeDatos(Principal.this);
 
-        String campos[] = {
-                CamposBasedeDatos.CAMPO_TITULO,
-                CamposBasedeDatos.CAMPO_DESCRIPCION
-        };
+        AdaptadorListaDeNotas adaptador = new AdaptadorListaDeNotas(Principal.this,R.layout.plantilla_listadenotas,bd.listarNotas(buscar));
 
-        BasedeDatos bd = new BasedeDatos(getApplicationContext());
-        Cursor datos = bd.listarNotas(queBuscar);
-
-        //si encuentra datos
-        //if(datos.moveToFirst()) {
-
-            SimpleCursorAdapter adaptador = new SimpleCursorAdapter(Principal.this,R.layout.plantilla_listadenotas,datos,campos,ids,0);
-            listaDeNotas.setAdapter(adaptador);
-
-        //}
-
-
+        listaDeNotas.setAdapter(adaptador);
     }
+
+
+
+
+    private void pasarAActivity_EscribirNota(String clave, String valorAPasar, boolean finalizaEsteActivity){
+
+        Intent intent = new Intent(Principal.this, EscribirNota.class);
+        if(!clave.isEmpty() || !valorAPasar.isEmpty()){
+        intent.putExtra(clave,valorAPasar);}
+        startActivity(intent);
+
+        if (finalizaEsteActivity){
+            finish();
+        }
+    }
+
+
 
 
 }

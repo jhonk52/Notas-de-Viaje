@@ -2,12 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="1dp">
 
     <TextView
         android:id="@+id/txt_titulo_plantillalistadenotas"
         android:layout_width="match_parent"
-        android:layout_height="32dp"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
         android:text="@string/titulo"
         android:textColor="@color/mygrey"
         android:textSize="24sp" />
@@ -15,8 +17,10 @@
     <TextView
         android:id="@+id/txt_descripcion_plantillalistadenotas"
         android:layout_width="match_parent"
-        android:layout_height="26sp"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
         android:text="@string/descripcion"
         android:textSize="20sp" />
+
 
 </LinearLayout>
