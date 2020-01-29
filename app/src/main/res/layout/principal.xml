@@ -24,8 +24,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
-        android:divider="@color/divider"
-        android:dividerHeight="2dp"
+        android:divider="@android:color/white"
+        android:dividerHeight="3dp"
         android:padding="10dp" />
 
 
