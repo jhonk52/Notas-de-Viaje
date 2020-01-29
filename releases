@@ -1,0 +1,13 @@
+1.0.0
+- Version Inicial solo con funcionalidades básicas de notas solo texto
+
+1.1.1
+
+- Mejoras de organizacion y mantenimiento de codigo
+- se agrega cuadro de dialogo para preguntar antes de eliminar una nota
+- mejoras esteticas
+- se soluciona bug en la lista de notas: el titulo se ve cortado al tener letra grande en el telefono
+- se listan las notas iniciando desde la mas reciente
+
+
+
