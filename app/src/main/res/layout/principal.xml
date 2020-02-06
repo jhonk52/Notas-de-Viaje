@@ -28,7 +28,6 @@
         android:dividerHeight="3dp"
         android:padding="10dp" />
 
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_agregarnota_principal"
         android:layout_width="wrap_content"
