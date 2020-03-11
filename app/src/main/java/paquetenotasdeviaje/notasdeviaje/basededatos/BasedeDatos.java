@@ -42,6 +42,13 @@ public class BasedeDatos extends SQLiteOpenHelper {
 
 
 
+    @Override
+    public synchronized void close() {
+        super.close();
+    }
+
+
+
 
     public boolean registrarNota(Nota nota){
 

@@ -24,47 +24,54 @@ import paquetenotasdeviaje.notasdeviaje.R;
 import paquetenotasdeviaje.notasdeviaje.adaptadores.AdaptadorListaDeNotas;
 import paquetenotasdeviaje.notasdeviaje.modelos.Nota;
 import paquetenotasdeviaje.notasdeviaje.basededatos.BasedeDatos;
-import paquetenotasdeviaje.notasdeviaje.basededatos.CamposBasedeDatos;
 
 public class Principal extends AppCompatActivity {
 
     ListView listaDeNotas;
-    FloatingActionButton btn_agregarNota;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.principal);
 
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setIcon(R.mipmap.ic_app);
 
-        btn_agregarNota = findViewById(R.id.btn_agregarnota_principal);
-        listaDeNotas = findViewById(R.id.listaDeNotas);
 
-        // se listan en pantalla todas las notas existentes
-        listarNotas("");
+        FloatingActionButton btn_agregarNota = findViewById(R.id.btn_agregarnota_principal);
+        listaDeNotas = findViewById(R.id.listaDeNotas);
+        registerForContextMenu(listaDeNotas); //se establece que el listview listaDeNotas va a tener un ContextMenu
+
 
         listaDeNotas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Nota nota = (Nota) listaDeNotas.getItemAtPosition(position);
-                pasarAActivity_EscribirNota("Titulo",nota.getTitulo(),true);
+                pasarAActivity_EscribirNota("Titulo",nota);
             }
         });
 
-        //se establece que el listview listaDeNotas va a tener un ContextMenu
-        registerForContextMenu(listaDeNotas);
 
         btn_agregarNota.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pasarAActivity_EscribirNota("","",true);
+                pasarAActivity_EscribirNota("",null);
             }
         });
 
+
+    }
+
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        listarNotas("");
 
     }
 
@@ -127,10 +134,8 @@ public class Principal extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
 
                                 BasedeDatos basedeDatos = new BasedeDatos(Principal.this);
-                                Nota nota = (Nota) listaDeNotas.getItemAtPosition(informacionItemSeleccionado.position);
-
-                                String tituloNotaAEliminar = nota.getTitulo();
-                                basedeDatos.eliminarNota(new Nota(tituloNotaAEliminar,""));
+                                basedeDatos.eliminarNota( (Nota)listaDeNotas.getItemAtPosition(informacionItemSeleccionado.position) );
+                                basedeDatos.close();
 
                                 listarNotas("");
 
@@ -153,22 +158,24 @@ public class Principal extends AppCompatActivity {
 
         AdaptadorListaDeNotas adaptador = new AdaptadorListaDeNotas(Principal.this,R.layout.plantilla_listadenotas,bd.listarNotas(buscar));
 
+        bd.close();
+
         listaDeNotas.setAdapter(adaptador);
     }
 
 
 
 
-    private void pasarAActivity_EscribirNota(String clave, String valorAPasar, boolean finalizaEsteActivity){
+    private void pasarAActivity_EscribirNota( String name, Nota noteToIntent ){
 
         Intent intent = new Intent(Principal.this, EscribirNota.class);
-        if(!clave.isEmpty() || !valorAPasar.isEmpty()){
-        intent.putExtra(clave,valorAPasar);}
-        startActivity(intent);
 
-        if (finalizaEsteActivity){
-            finish();
+        if( !name.isEmpty() || noteToIntent != null ){
+            intent.putExtra( name, noteToIntent.convertToArrayString() );
         }
+
+        startActivity(intent);
+        finish();
     }
 
 

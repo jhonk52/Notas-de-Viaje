@@ -33,4 +33,14 @@ public class Nota {
     public boolean equals(Nota nota) {
         return (nota.getTitulo().equals(this.titulo) && nota.getDescripcion().equals(this.Descripcion));
     }
+
+    public String[] convertToArrayString (){
+        return new String[] { titulo, Descripcion };
+    }
+
+    public void setNoteFromArrayString (String[] notaInArrayString){
+        this.titulo = notaInArrayString[0];
+        this.Descripcion = notaInArrayString[1];
+    }
+
 }

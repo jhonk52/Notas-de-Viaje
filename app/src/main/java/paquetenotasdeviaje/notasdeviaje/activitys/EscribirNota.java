@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,45 +22,46 @@ import paquetenotasdeviaje.notasdeviaje.basededatos.BasedeDatos;
 
 public class EscribirNota extends AppCompatActivity{
 
-    EditText txt_titulo,txt_descripcion;
-    Boolean esNotaNueva;
-    Nota notaAEditar;
+    EditText txt_title, txt_description;
+    Boolean isNoteNew;
+    Nota noteToEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.escribir_nota);
 
-        notaAEditar = new Nota("","");
 
-        txt_titulo = findViewById(R.id.txt_titulo_crearnota);
-        txt_descripcion = findViewById(R.id.txt_descripcion_crearnota);
+        txt_title = findViewById(R.id.txt_titulo_crearnota);
+        txt_description = findViewById(R.id.txt_descripcion_crearnota);
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        noteToEdit = new Nota();
 
-        // Si al llamar este activity le mandaron informacion
-        if(getIntent().getExtras()!=null) {
+        if( getIntent().getExtras() != null ) { // Si al llamar este activity le mandaron informacion
 
-            String titulo = getIntent().getExtras().getString("Titulo");
+
+            noteToEdit.setNoteFromArrayString( getIntent().getExtras().getStringArray("Titulo") );
             getSupportActionBar().setTitle(R.string.editar_nota);
-            esNotaNueva = false;
+            isNoteNew = false;
 
-            BasedeDatos basedeDatos = new BasedeDatos(EscribirNota.this);
-            notaAEditar = basedeDatos.consultarNota(titulo);
+            txt_title.setText(noteToEdit.getTitulo());
+            txt_description.setText(noteToEdit.getDescripcion());
 
-            txt_titulo.setText(notaAEditar.getTitulo());
-            txt_descripcion.setText(notaAEditar.getDescripcion());
+            hideKeypad();
 
-            ocultarTecladoHastaDarClick();
 
         }else{ // Si al llamar este activity NO le mandaron informacion
+
             getSupportActionBar().setTitle(R.string.escribir_nota);
-            txt_titulo.requestFocus();
-            esNotaNueva = true;
+            txt_title.requestFocus();
+            isNoteNew = true;
+
         }
 
 
@@ -85,62 +85,54 @@ public class EscribirNota extends AppCompatActivity{
 
             case R.id.item_guardar_menucrearnota:
 
-                if ( validacion1() ) {
+
+                if ( check1() ) {
+
                     Toast.makeText(EscribirNota.this, "Por favor escriba un nombre", Toast.LENGTH_SHORT).show();
-                    txt_titulo.requestFocus();
+                    txt_title.requestFocus();
+
+                } else if ( check2() ){
+
+                    saveAndExit();
+
+                } else if ( check3() ){
+
+                    updateAndExit();
                 }
 
-                if ( validacion2() ){
-                    guardarYSalir();
-                }
-
-                if ( validacion3() ){
-                    actualizarYSalir();
-                }
 
                 break;
 
             case R.id.item_eliminar_menuescribirnota:
 
-                AlertDialog.Builder msjAlerta = new AlertDialog.Builder(EscribirNota.this);
 
-                if(!esNotaNueva){// si es nota a editar...
-
-                    msjAlerta.setTitle("Eliminar Nota")
+                 new AlertDialog.Builder(EscribirNota.this)
+                    .setTitle("Eliminar Nota")
                             .setMessage("Esta seguro que desea eliminar esta nota?")
                             .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
 
-                                    new BasedeDatos(EscribirNota.this).eliminarNota(notaAEditar);
-                                    Toast.makeText(EscribirNota.this, "Nota Eliminada", Toast.LENGTH_SHORT).show();
-                                    irAPrincipal();
+                                    if (isNoteNew) {
 
+                                        txt_title.getText().clear();
+                                        txt_description.getText().clear();
+                                        Toast.makeText(EscribirNota.this, "Nota Eliminada", Toast.LENGTH_SHORT).show();
+
+                                    }else{ // es nota a editar
+
+                                        new BasedeDatos(EscribirNota.this).eliminarNota(noteToEdit);
+                                        Toast.makeText(EscribirNota.this, "Nota Eliminada", Toast.LENGTH_SHORT).show();
+                                        exit();
+                                    }
                                 }
                             }).setNegativeButton("Cancelar",null)
                             .show();
 
-                }else{// si es una nueva nota
-
-                    msjAlerta.setTitle("Eliminar Nota")
-                            .setMessage("Esta seguro que desea eliminar esta nota?")
-                            .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                    txt_titulo.getText().clear();
-                                    txt_descripcion.getText().clear();
-                                    Toast.makeText(EscribirNota.this, "Nota Eliminada", Toast.LENGTH_SHORT).show();
-
-                                }
-                            }).setNegativeButton("Cancelar",null)
-                            .show();
-                }
-                break;
 
             case android.R.id.home:
 
-                validacionesAntesDeSalir();
+                checkBeforeExit();
 
                 break;
         }
@@ -152,21 +144,22 @@ public class EscribirNota extends AppCompatActivity{
 
     @Override
     public void onBackPressed() {
-        validacionesAntesDeSalir();
+        checkBeforeExit();
         //super.onBackPressed();
     }
 
 
 
 
-    private void validacionesAntesDeSalir(){
+    private void checkBeforeExit(){
+
         AlertDialog.Builder msjAlerta = new AlertDialog.Builder(EscribirNota.this);
 
-        if ( validacion4() ) {
-            irAPrincipal();
-        }
+        if ( check4() ) {
 
-        if ( validacion1() ) {
+            exit();
+
+        } else if ( check1() ) {
 
             msjAlerta.setTitle("Nota sin Nombre")
                     .setMessage("Debe asignarle un nombre a esta nota")
@@ -174,45 +167,39 @@ public class EscribirNota extends AppCompatActivity{
                     setNegativeButton("Salir sin guardar", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    irAPrincipal();
+                    exit();
                 }
             }).show();
 
-        }
-
-
-        if ( validacion2() ){
+        } else if ( check2() ){
 
             msjAlerta.setTitle("Salir")
                     .setMessage("Desea Salir sin guardar?")
                     .setPositiveButton("Salir", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            irAPrincipal();
+                            exit();
                         }
                     }).setNegativeButton("Guardar y salir", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    guardarYSalir();
+                    saveAndExit();
                 }
             }).show();
 
-        }
-
-
-        if ( validacion3() ){
+        } else if ( check3() ){
 
             msjAlerta.setTitle("Salir")
                     .setMessage("Desea Salir sin guardar?")
                     .setPositiveButton("Salir", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            irAPrincipal();
+                            exit();
                         }
                     }).setNegativeButton("Guardar y salir", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    actualizarYSalir();
+                    updateAndExit();
                 }
             }).show();
 
@@ -223,15 +210,15 @@ public class EscribirNota extends AppCompatActivity{
 
 
 
-    private void guardarYSalir(){
+    private void saveAndExit(){
 
-        Nota nota = new Nota(txt_titulo.getText().toString(),txt_descripcion.getText().toString());
+        Nota nota = new Nota(txt_title.getText().toString(), txt_description.getText().toString());
         BasedeDatos basedeDatos = new BasedeDatos(EscribirNota.this);
 
         if(basedeDatos.registrarNota(nota)){
 
             Toast.makeText(EscribirNota.this, "Nota Guardada!", Toast.LENGTH_SHORT).show();
-            irAPrincipal();
+            exit();
         }else{
             Toast.makeText(EscribirNota.this,"Ha ocurrido un error,\nIntente Nuevamente",Toast.LENGTH_SHORT).show();
         }
@@ -240,15 +227,15 @@ public class EscribirNota extends AppCompatActivity{
 
 
 
-    private void actualizarYSalir(){
+    private void updateAndExit(){
 
-        Nota nota = new Nota(txt_titulo.getText().toString(),txt_descripcion.getText().toString());
+        Nota nota = new Nota(txt_title.getText().toString(), txt_description.getText().toString());
         BasedeDatos basedeDatos = new BasedeDatos(EscribirNota.this);
 
         if(basedeDatos.actualizarNota(nota)){
 
             Toast.makeText(EscribirNota.this, "Nota Actualizada!", Toast.LENGTH_SHORT).show();
-            irAPrincipal();
+            exit();
         }else{
             Toast.makeText(EscribirNota.this,"Ha ocurrido un error,\nIntente Nuevamente",Toast.LENGTH_SHORT).show();
         }
@@ -257,7 +244,7 @@ public class EscribirNota extends AppCompatActivity{
 
 
 
-    private void irAPrincipal(){
+    private void exit(){
 
         Intent intent = new Intent(EscribirNota.this, Principal.class);
         startActivity(intent);
@@ -267,25 +254,25 @@ public class EscribirNota extends AppCompatActivity{
 
 
     @SuppressLint("ClickableViewAccessibility")
-    private void ocultarTecladoHastaDarClick(){
+    private void hideKeypad(){
 
-        txt_titulo.setFocusableInTouchMode(false);
-        txt_descripcion.setFocusableInTouchMode(false);
+        txt_title.setFocusableInTouchMode(false);
+        txt_description.setFocusableInTouchMode(false);
 
-        txt_descripcion.setOnTouchListener(new View.OnTouchListener() {
+        txt_description.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                txt_descripcion.setFocusableInTouchMode(true);
-                txt_descripcion.requestFocus();
+                txt_description.setFocusableInTouchMode(true);
+                txt_description.requestFocus();
                 return false;
             }
         });
 
-        txt_titulo.setOnTouchListener(new View.OnTouchListener() {
+        txt_title.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                txt_titulo.setFocusableInTouchMode(true);
-                txt_descripcion.requestFocus();
+                txt_title.setFocusableInTouchMode(true);
+                txt_description.requestFocus();
                 return false;
             }
         });
@@ -295,21 +282,21 @@ public class EscribirNota extends AppCompatActivity{
 
 
     // ver tabla de validaciones al final
-    private boolean validacion1(){
-        return  (esNotaNueva && !txt_descripcion.getText().toString().isEmpty() && txt_titulo.getText().toString().isEmpty());
+    private boolean check1(){
+        return  (isNoteNew && !txt_description.getText().toString().isEmpty() && txt_title.getText().toString().isEmpty());
     }
-    private boolean validacion2(){
-        return ( (esNotaNueva && !txt_titulo.getText().toString().isEmpty() && txt_descripcion.getText().toString().isEmpty()) ||
-                 (esNotaNueva && !txt_titulo.getText().toString().isEmpty() && !txt_descripcion.getText().toString().isEmpty()) ||
-                 (!esNotaNueva && !(notaAEditar.getTitulo().equals(txt_titulo.getText().toString()))  &&  notaAEditar.getDescripcion().equals(txt_descripcion.getText().toString())) ||
-                 (!esNotaNueva && !(notaAEditar.getTitulo().equals(txt_titulo.getText().toString()))  &&  !(notaAEditar.getDescripcion().equals(txt_descripcion.getText().toString())))
+    private boolean check2(){
+        return ( (isNoteNew && !txt_title.getText().toString().isEmpty() && txt_description.getText().toString().isEmpty()) ||
+                 (isNoteNew && !txt_title.getText().toString().isEmpty() && !txt_description.getText().toString().isEmpty()) ||
+                 (!isNoteNew && !(noteToEdit.getTitulo().equals(txt_title.getText().toString()))  &&  noteToEdit.getDescripcion().equals(txt_description.getText().toString())) ||
+                 (!isNoteNew && !(noteToEdit.getTitulo().equals(txt_title.getText().toString()))  &&  !(noteToEdit.getDescripcion().equals(txt_description.getText().toString())))
                );
         }
-    private boolean validacion3(){
-        return ( !esNotaNueva && notaAEditar.getTitulo().equals(txt_titulo.getText().toString()) && !(notaAEditar.getDescripcion().equals(txt_descripcion.getText().toString())) );
+    private boolean check3(){
+        return ( !isNoteNew && noteToEdit.getTitulo().equals(txt_title.getText().toString()) && !(noteToEdit.getDescripcion().equals(txt_description.getText().toString())) );
         }
-    private boolean validacion4(){
-        return notaAEditar.equals(new Nota(txt_titulo.getText().toString(),txt_descripcion.getText().toString()));
+    private boolean check4(){
+        return noteToEdit.equals(new Nota(txt_title.getText().toString(), txt_description.getText().toString()));
     }
 
 
