@@ -1,4 +1,4 @@
-package paquetenotasdeviaje.notasdeviaje.model;
+package paquetenotasdeviaje.notasdeviaje.data;
 
 import android.content.ContentValues;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package paquetenotasdeviaje.notasdeviaje.view;
+package paquetenotasdeviaje.notasdeviaje.ui.activitys;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -21,13 +21,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 
 import paquetenotasdeviaje.notasdeviaje.R;
-import paquetenotasdeviaje.notasdeviaje.model.Note;
+import paquetenotasdeviaje.notasdeviaje.data.Note;
 import paquetenotasdeviaje.notasdeviaje.controller.NoteController;
+import paquetenotasdeviaje.notasdeviaje.ui.adapters.ListNotesAdapter;
 
 public class PrincipalActivity extends AppCompatActivity {
 
     NoteController _noteController;
-    ListView listNotes;
+    ListView lsv_noteList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,14 +42,14 @@ public class PrincipalActivity extends AppCompatActivity {
         getSupportActionBar().setIcon(R.mipmap.ic_app);
 
 
-        listNotes = findViewById(R.id.lst_notelist);
-        listNotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lsv_noteList = findViewById(R.id.lst_notelist);
+        lsv_noteList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                goToNoteActivity("select_note", ((Note)listNotes.getItemAtPosition(position)) );
+                goToNoteActivity("select_note", ((Note) lsv_noteList.getItemAtPosition(position)) );
             }
         });
-        registerForContextMenu(listNotes); //se establece que el listview listaDeNotas va a tener un ContextMenu
+        registerForContextMenu(lsv_noteList); //se establece que el listview listaDeNotas va a tener un ContextMenu
 
 
         FloatingActionButton btn_agregarNota = findViewById(R.id.btn_newnote_principalactivity);
@@ -115,7 +116,7 @@ public class PrincipalActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                _noteController.deleteNote( (Note) listNotes.getItemAtPosition(informacionItemSeleccionado.position) );
+                                _noteController.deleteNote( (Note) lsv_noteList.getItemAtPosition(informacionItemSeleccionado.position) );
                                 listNotes(_noteController.getNoteList(""));
 
                             }
@@ -131,7 +132,7 @@ public class PrincipalActivity extends AppCompatActivity {
 
     public void listNotes (List<Note> notes){
         ListNotesAdapter adapter = new ListNotesAdapter(this, R.layout.listitem_principal, notes);
-        listNotes.setAdapter(adapter);
+        lsv_noteList.setAdapter(adapter);
     }
 
 

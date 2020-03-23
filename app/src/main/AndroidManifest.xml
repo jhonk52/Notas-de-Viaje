@@ -8,8 +8,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppThemeNoActionBar">
-        <activity android:name="paquetenotasdeviaje.notasdeviaje.view.NoteActivity"/>
-        <activity android:name="paquetenotasdeviaje.notasdeviaje.view.PrincipalActivity">
+        <activity android:name="paquetenotasdeviaje.notasdeviaje.ui.activitys.NoteActivity"/>
+        <activity android:name="paquetenotasdeviaje.notasdeviaje.ui.activitys.PrincipalActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

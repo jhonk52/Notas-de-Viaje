@@ -1,4 +1,4 @@
-package paquetenotasdeviaje.notasdeviaje.view;
+package paquetenotasdeviaje.notasdeviaje.ui.activitys;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -17,7 +17,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import paquetenotasdeviaje.notasdeviaje.R;
-import paquetenotasdeviaje.notasdeviaje.model.Note;
+import paquetenotasdeviaje.notasdeviaje.data.Note;
 import paquetenotasdeviaje.notasdeviaje.controller.NoteController;
 
 public class NoteActivity extends AppCompatActivity{

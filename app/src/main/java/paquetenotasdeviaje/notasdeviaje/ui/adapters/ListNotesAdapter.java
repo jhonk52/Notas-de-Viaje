@@ -1,4 +1,4 @@
-package paquetenotasdeviaje.notasdeviaje.view;
+package paquetenotasdeviaje.notasdeviaje.ui.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 import java.util.List;
 
 import paquetenotasdeviaje.notasdeviaje.R;
-import paquetenotasdeviaje.notasdeviaje.model.Note;
+import paquetenotasdeviaje.notasdeviaje.data.Note;
 
 public class ListNotesAdapter extends ArrayAdapter<Note> {
 

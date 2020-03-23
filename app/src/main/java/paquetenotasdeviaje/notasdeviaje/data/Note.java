@@ -1,4 +1,4 @@
-package paquetenotasdeviaje.notasdeviaje.model;
+package paquetenotasdeviaje.notasdeviaje.data;
 
 import androidx.annotation.NonNull;
 

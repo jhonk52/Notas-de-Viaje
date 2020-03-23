@@ -4,8 +4,8 @@ import android.content.Context;
 
 import java.util.List;
 
-import paquetenotasdeviaje.notasdeviaje.model.Note;
-import paquetenotasdeviaje.notasdeviaje.model.DaoNote;
+import paquetenotasdeviaje.notasdeviaje.data.Note;
+import paquetenotasdeviaje.notasdeviaje.data.DaoNote;
 
 public class NoteController {
 
