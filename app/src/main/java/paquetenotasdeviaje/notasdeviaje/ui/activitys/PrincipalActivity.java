@@ -22,7 +22,7 @@ import java.util.List;
 
 import paquetenotasdeviaje.notasdeviaje.R;
 import paquetenotasdeviaje.notasdeviaje.data.Note;
-import paquetenotasdeviaje.notasdeviaje.controller.NoteController;
+import paquetenotasdeviaje.notasdeviaje.control.NoteController;
 import paquetenotasdeviaje.notasdeviaje.ui.adapters.ListNotesAdapter;
 
 public class PrincipalActivity extends AppCompatActivity {

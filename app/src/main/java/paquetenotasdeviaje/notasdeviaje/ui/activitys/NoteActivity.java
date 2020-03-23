@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import paquetenotasdeviaje.notasdeviaje.R;
 import paquetenotasdeviaje.notasdeviaje.data.Note;
-import paquetenotasdeviaje.notasdeviaje.controller.NoteController;
+import paquetenotasdeviaje.notasdeviaje.control.NoteController;
 
 public class NoteActivity extends AppCompatActivity{
 

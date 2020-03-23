@@ -1,4 +1,4 @@
-package paquetenotasdeviaje.notasdeviaje.controller;
+package paquetenotasdeviaje.notasdeviaje.control;
 
 import android.content.Context;
 
