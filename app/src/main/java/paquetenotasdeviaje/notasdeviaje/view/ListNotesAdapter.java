@@ -1,4 +1,4 @@
-package paquetenotasdeviaje.notasdeviaje.adaptadores;
+package paquetenotasdeviaje.notasdeviaje.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,19 +13,16 @@ import androidx.annotation.Nullable;
 import java.util.List;
 
 import paquetenotasdeviaje.notasdeviaje.R;
-import paquetenotasdeviaje.notasdeviaje.modelos.Nota;
+import paquetenotasdeviaje.notasdeviaje.model.Note;
 
-public class AdaptadorListaDeNotas extends ArrayAdapter<Nota> {
+public class ListNotesAdapter extends ArrayAdapter<Note> {
 
     private int layout;
 
-    public AdaptadorListaDeNotas(@NonNull Context context, int layout, @NonNull List<Nota> notas) {
-        super(context, layout, notas);
-
+    public ListNotesAdapter(@NonNull Context context, int layout, @NonNull List<Note> notes) {
+        super(context, layout, notes);
         this.layout = layout;
-
     }
-
 
     @NonNull
     @Override
@@ -37,13 +34,13 @@ public class AdaptadorListaDeNotas extends ArrayAdapter<Nota> {
             convertView = inflater.inflate(layout, parent, false);
         }
 
-        TextView titulo = convertView.findViewById(R.id.txt_titulo_plantillalistadenotas);
-        TextView descripcion = convertView.findViewById(R.id.txt_descripcion_plantillalistadenotas);
+        TextView title = convertView.findViewById(R.id.txt_title_listitem_principalactivity);
+        TextView description = convertView.findViewById(R.id.txt_description_listitem_principalactivity);
 
-        Nota nota = getItem(position);
+        Note note = getItem(position);
 
-        titulo.setText(nota.getTitulo());
-        descripcion.setText(nota.getDescripcion());
+        title.setText(note.getTitle());
+        description.setText(note.getDescription());
 
         return convertView;
     }

@@ -6,13 +6,14 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardview"
+        android:id="@+id/cdv_listitem_principalactivity"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="7dp"
         app:cardElevation="2dp"
         app:contentPadding="5dp"
+        app:cardPreventCornerOverlap="true"
         app:cardUseCompatPadding="true">
 
 
@@ -22,7 +23,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/txt_titulo_plantillalistadenotas"
+                android:id="@+id/txt_title_listitem_principalactivity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
@@ -31,7 +32,7 @@
                 android:textSize="24sp" />
 
             <TextView
-                android:id="@+id/txt_descripcion_plantillalistadenotas"
+                android:id="@+id/txt_description_listitem_principalactivity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="bottom"

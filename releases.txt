@@ -1,13 +1,13 @@
 1.0.0
-- Version Inicial solo con funcionalidades básicas de notas solo texto
+- Version Inicial solo con funcionalidades básicas de notes solo texto
 
 1.1.1
 
 - Mejoras de organizacion y mantenimiento de codigo.
-- se agrega cuadro de dialogo para preguntar antes de eliminar una nota.
+- se agrega cuadro de dialogo para preguntar antes de eliminar una note.
 - mejoras de diseño.
-- se soluciona bug en la lista de notas: el titulo se ve cortado al tener letra grande en el dispositivo.
-- se listan las notas iniciando desde la mas reciente.
+- se soluciona bug en la lista de notes: el titulo se ve cortado al tener letra grande en el dispositivo.
+- se listan las notes iniciando desde la mas reciente.
 
 
 

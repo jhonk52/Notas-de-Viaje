@@ -4,12 +4,17 @@
     >
 
     <item
-        android:id="@+id/item_eliminar_menuescribirnota"
+        android:id="@+id/item_delete_noteactivity"
         android:title="@string/eliminar_nota"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/item_guardar_menucrearnota"
+        android:id="@+id/item_duplicate_noteactivity"
+        android:title="@string/duplicar_nota"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/item_save_noteactivity"
         android:title="@string/guardar"
         app:showAsAction="ifRoom" />
 

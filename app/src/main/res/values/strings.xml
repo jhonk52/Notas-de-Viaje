@@ -5,9 +5,20 @@
     <string name="descripcion">Descripcion</string>
     <string name="cancelar">Cancelar</string>
     <string name="guardar">Guardar</string>
+    <string name="salir">Salir</string>
+    <string name="guardar_y_salir">Guardar y salir</string>
     <string name="escribir_nota">Escribir Nota</string>
     <string name="editar_nota">Editar Nota</string>
     <string name="eliminar">Eliminar</string>
     <string name="buscar">Buscar</string>
-    <string name="eliminar_nota">Eliminar nota</string>
+    <string name="eliminar_nota">Eliminar Nota</string>
+    <string name="duplicar_nota">Duplicar Nota</string>
+    <string name="alerta_eliminar_nota">Está seguro que desea eliminar esta nota?</string>
+    <string name="nota_eliminada">Nota Eliminada</string>
+    <string name="nota_guardada">Nota Guardada!</string>
+    <string name="nota_duplicada">Nota Duplicada!</string>
+    <string name="error_eliminar">Error: no se logró eliminar la nota</string>
+    <string name="error_guardar">No se logró guardar esta nota</string>
+    <string name="error_duplicar">No se logró duplicar esta nota</string>
+    <string name="salir_sin_guardar">Desea Salir sin guardar?</string>
 </resources>

@@ -4,14 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activitys.EscribirNota">
+    tools:context=".view.NoteActivity">
 
     <include
         layout="@layout/toolbar"
         />
 
     <EditText
-        android:id="@+id/txt_titulo_crearnota"
+        android:id="@+id/txt_title_noteactivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -23,7 +23,7 @@
         />
 
     <EditText
-        android:id="@+id/txt_descripcion_crearnota"
+        android:id="@+id/txt_description_noteactivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:ems="10"

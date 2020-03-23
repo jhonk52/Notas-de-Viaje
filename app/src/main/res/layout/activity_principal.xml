@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activitys.Principal">
+    tools:context=".view.PrincipalActivity">
 
     <include
         layout="@layout/toolbar"
@@ -20,17 +20,16 @@
 
 
     <ListView
-        android:id="@+id/listaDeNotas"
+        android:id="@+id/lst_notelist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbarpack"
         android:divider="@android:color/white"
-        android:dividerHeight="3dp"
-        android:padding="10dp" />
+        android:dividerHeight="3dp" />
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btn_agregarnota_principal"
+        android:id="@+id/btn_newnote_principalactivity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
